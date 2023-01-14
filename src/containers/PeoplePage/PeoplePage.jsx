@@ -3,30 +3,36 @@ import { getApiResource } from "../../utils/network";
 import { API_PEOPLE } from "../../constants/api";
 import { getPeopleId, getPeopleImage } from "../../services/getPeopleData";
 import PeopleList from "../../components/PeoplePage/PeopleList";
+import {withErrorApi} from "../../hoc-helpers/withErrorApi";
 
 
-const PeoplePage = () => {
+const PeoplePage = ({ setErrorApi }) => {
     const [people, setPeople] = useState(null)
 
     const getResource = async (url) => {
         const res = await getApiResource(url);
         // console.log(res)
 
-        const peopleList = res.results.map(({ name, url }) => {
-            const id = getPeopleId(url);
-            const img = getPeopleImage(id);
+        if(res) {
+            const peopleList = res.results.map(({ name, url }) => {
+                const id = getPeopleId(url);
+                const img = getPeopleImage(id);
 
-            console.log(img)
+                // console.log(img)
 
-            return {
-                id,
-                name,
-                img
-            }
-        })
+                return {
+                    id,
+                    name,
+                    img
+                }
+            })
 
-        // console.log(peopleList);
-        setPeople(peopleList);
+            // console.log(peopleList);
+            setPeople(peopleList);
+            setErrorApi(false);
+        } else {
+            setErrorApi(true);
+        }
     }
 
     useEffect(() => {
@@ -35,9 +41,10 @@ const PeoplePage = () => {
 
     return (
         <>
+            <h1>Navigation</h1>
             { people &&  <PeopleList people={people} /> }
         </>
     )
 }
 
-export default PeoplePage;
+export default withErrorApi(PeoplePage);

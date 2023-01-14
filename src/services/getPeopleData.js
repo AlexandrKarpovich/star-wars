@@ -8,7 +8,7 @@ const getId = (url, category) => {
      // .replace(HTTP+SWAPI_ROOT+category, '')
      .replace(HTTPS+SWAPI_ROOT+category, '')
      .replace(/\//g, '')
- console.log(id);
+ // console.log(id);
  return id;
 }
 
